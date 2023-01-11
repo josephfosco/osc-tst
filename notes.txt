@@ -1,0 +1,24 @@
+To start the supercollider server use
+pw-jack scsynth -u 3333
+
+this starts supercollider with the udp port 3333
+udp port 57711 seems to be default ued for supercollider
+
+
+==================================================================
+
+OSC
+
+Supercollider OSC command reference
+http://doc.sccode.org/Reference/Server-Command-Reference.html
+
+
+==================================================================
+
+Look into what the file that SC lang uses to store synthdefs looks like
+
+Rename the osc directory to osc-sc and move it to the same level as osc-clj and src.
+Convert all references to it and set it up as a OSC Supercolider lib
+
+Remove the extra functions added to the cop of connections - find where these functions
+are located in some helper function
