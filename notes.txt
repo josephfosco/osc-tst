@@ -22,3 +22,5 @@ Convert all references to it and set it up as a OSC Supercolider lib
 
 Remove the extra functions added to the cop of connections - find where these functions
 are located in some helper function
+
+Fix license - add mit license to Overtone code and osc-clj
