@@ -1,8 +1,8 @@
 (ns osc-tst.core
-  (:require [overtone.osc]
-            [osc-tst.osc.connection]
-            ))
+  (:use [sc-osc.connection]
+        ))
 
 (defn sc-connect
-  (osc-tst.osc.connection/connect)
+  []
+  (sc-osc.connection/connect)
    )

@@ -6,7 +6,7 @@
     ^{:doc "A basic dependency system for specifying the execution of
            fns once dependencies have been met."
       :author "Sam Aaron & Jeff Rose"}
-  osc-tst.osc.deps
+  sc-osc.deps
   (:require [clojure.set :as set]
             ;; [overtone.config.log :as log]
             )

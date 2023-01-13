@@ -4,7 +4,7 @@
 (ns
     ^{:doc "A simple event system that handles both synchronous and asynchronous events."
       :author "Jeff Rose & Sam Aaron"}
-    osc-tst.osc.handlers
+    sc-osc.handlers
   (:import (java.util.concurrent Executors))
   (:use [clojure.stacktrace]))
 

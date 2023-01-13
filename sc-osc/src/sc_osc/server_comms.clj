@@ -2,12 +2,12 @@
 
 
 
-(ns osc-tst.osc.server-comms
-  (:use [osc_tst.osc.osc-validator]
+(ns sc-osc.server-comms
+  (:use [sc-osc.osc-validator]
   ;;       [overtone.libs event counters]
-        [osc-tst.osc.event]
+        [sc-osc.event]
   ;;       [overtone.helpers.lib :only [uuid deref!]])
-         [osc-tst.osc.lib :only [uuid]])
+        [sc-osc.lib :only [uuid]])
   ;; (:require [overtone.config.log :as log])
   )
 

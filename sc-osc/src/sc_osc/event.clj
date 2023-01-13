@@ -20,11 +20,11 @@
 (ns
   ^{:doc "A simple event system that processes fired events in a thread pool."
      :author "Jeff Rose, Sam Aaron"}
-  osc-tst.osc.event
+  sc-osc.event
   (:import [java.util.concurrent LinkedBlockingQueue])
-  (:use [osc_tst.osc.ref :only [swap-returning-prev!]])
+  (:use [sc-osc.ref :only [swap-returning-prev!]])
   (:require ;; [overtone.config.log :as log]
-            [osc-tst.osc.handlers :as handlers])
+            [sc-osc.handlers :as handlers])
   )
 
 (defonce ^:private handler-pool (handlers/mk-handler-pool "Overtone Event Handlers"))

@@ -1,7 +1,7 @@
 To start the supercollider server use
-pw-jack scsynth -u 3333
+scsynth -u 57711
 
-this starts supercollider with the udp port 3333
+this starts supercollider with the udp port 57711
 udp port 57711 seems to be default ued for supercollider
 
 

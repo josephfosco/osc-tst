@@ -1,12 +1,10 @@
 ;; Copied from the Overtone project overtone.helpers.ref
 
 
-(ns osc-tst.osc.ref)
-
 (ns
     ^{:doc "Reference helper fns"
       :author "Sam Aaron"}
-  osc_tst.osc.ref)
+  sc-osc.ref)
 
 (defn swap-returning-prev!
   "Similar to swap! except returns vector containing the previous and new values

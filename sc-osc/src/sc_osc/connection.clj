@@ -18,23 +18,23 @@
 ;;             [overtone.helpers.file :refer [file-exists? dir-exists? resolve-tilde-path]]
 ;;             [overtone.helpers.system :refer [windows-os? get-cpu-bits get-os linux-os?]]            ))
 
-(ns osc-tst.osc.connection
+(ns sc-osc.connection
   (:import [java.io BufferedInputStream File])
   (:require [clojure.java.shell :as shell]
             ;; [overtone.config.log :as log]
             ;; [overtone.config.store :as config]
-            [osc-tst.osc.deps :as deps]
-            [osc-tst.osc.event :as event]
+            [sc-osc.deps :as deps]
+            [sc-osc.event :as event]
             ;; [overtone.version :as version]
-            [osc-tst.osc.defaults :as defaults]
+            [sc-osc.defaults :as defaults]
             ;; [overtone.sc.machinery.server.comms :refer [server-recv server-snd server-osc-peer*]]
-            [osc-tst.osc.server-comms :refer [server-recv server-snd server-osc-peer*]]
+            [sc-osc.server-comms :refer [server-recv server-snd server-osc-peer*]]
             ;; [overtone.sc.machinery.server.native :as native]
             ;; [overtone.sc.machinery.server.args :as args]
             [overtone.osc :as osc]
             ;; [overtone.osc.decode :refer [osc-decode-packet]]
             ;; [overtone.helpers.lib :refer [print-ascii-art-overtone-logo windows-sc-path deref!]]
-            [osc-tst.osc.lib :refer [deref!]]
+            [sc-osc.lib :refer [deref!]]
             ;; [overtone.helpers.file :refer [file-exists? dir-exists? resolve-tilde-path]]
             ;; [overtone.helpers.system :refer [windows-os? get-cpu-bits get-os linux-os?]]
             ))

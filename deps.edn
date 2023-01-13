@@ -1,7 +1,8 @@
-{:paths ["src", "dev", "osc-clj"]
+{:paths ["src", "dev"]
  :deps
  {org.clojure/clojure {:mvn/version "1.11.1"}
   overtone/osc-clj {:local/root "/home/joseph/src/clj/osc-tst/osc-clj"}
+  sc-osc/sc-osc {:local/root "/home/joseph/src/clj/osc-tst/sc-osc"}
   ;; overtone/osc-clj {:mvn/version "0.9.0"}
   }
  :aliases
