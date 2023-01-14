@@ -269,7 +269,7 @@
   "Read a future or promise waiting for timeout ms for it to be
    successfully dereferenced. Raises an exception if a timeout
    occurs. You may optionally pass a message explaining what you're
-   currently doing whilst defef!ing which will be used to construct the
+   currently doing whilst deref!ing which will be used to construct the
    TimeoutException."
   ([ref] (deref! ref DEFAULT-PROMISE-TIMEOUT ""))
   ([ref timeout-or-msg] (if (string? timeout-or-msg)

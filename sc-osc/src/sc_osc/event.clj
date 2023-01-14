@@ -20,7 +20,7 @@
             [sc-osc.handlers :as handlers])
   )
 
-(defonce ^:private handler-pool (handlers/mk-handler-pool "Overtone Event Handlers"))
+(defonce ^:private handler-pool (handlers/mk-handler-pool "SuperCollider Event Handlers"))
 (defonce ^:private event-debug* (atom false))
 (defonce ^:private monitoring?* (atom false))
 (defonce ^:private monitor* (atom {}))
@@ -197,6 +197,7 @@
   (remove-event-handler ::bar-key)
   (event :foo :val 200) ; my-foo-handler no longer called"
   [key]
+  (println "lossy-workers " lossy-workers*)
   (let [[old new] (swap-returning-prev! lossy-workers* dissoc key)]
     (when-let [old-worker (get old key)]
       (.put (:queue old-worker) :die)))
@@ -226,11 +227,10 @@
   [event-type & args]
   ;; (when @log-events?
   ;;   (log-event "event: " event-type " " args))
-  (println "event: " event-type " args")
+  (println "event: " event-type " " args)
   ;; (when @event-debug*
   ;;   (println "event: " (with-out-str (pr event-type args)) "\n")
   ;;   )
-
   (println "event: " (with-out-str (pr event-type args)) "\n")
 
   ;; (when @monitoring?*

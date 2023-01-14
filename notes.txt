@@ -17,10 +17,4 @@ http://doc.sccode.org/Reference/Server-Command-Reference.html
 
 Look into what the file that SC lang uses to store synthdefs looks like
 
-Rename the osc directory to osc-sc and move it to the same level as osc-clj and src.
-Convert all references to it and set it up as a OSC Supercolider lib
-
-Remove the extra functions added to the cop of connections - find where these functions
-are located in some helper function
-
 Fix license - add mit license to Overtone code and osc-clj
