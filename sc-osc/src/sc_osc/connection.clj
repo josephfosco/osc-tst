@@ -37,6 +37,7 @@
             [sc-osc.lib :refer [deref!]]
             ;; [overtone.helpers.file :refer [file-exists? dir-exists? resolve-tilde-path]]
             ;; [overtone.helpers.system :refer [windows-os? get-cpu-bits get-os linux-os?]]
+            [sc-osc.system :refer [get-os]]
             ))
 
 (defonce server-thread*       (ref nil))
@@ -45,34 +46,6 @@
 (defonce connection-status*   (ref :disconnected))
 
 (defonce external-server-log* (atom []))
-
-;; ================================================================================================
-
-(defn os-name
-  "Returns a string representing the current operating system. Useful
-   for debugging, etc. Prefer get-os for os-specific logic."
-  []
-  (System/getProperty "os.name"))
-
-(defn get-os
-  "Return the OS as a keyword. One of :windows :linux :mac"
-  []
-  (let [os (os-name)]
-    (cond
-      (re-find #"[Ww]indows" os) :windows
-      (re-find #"[Ll]inux" os)   :linux
-      (re-find #"[Mm]ac" os)     :mac)))
-
-
-(defn linux-os?
-  "Returns true if the current os is mac based"
-  []
-  (= :linux (get-os)))
-
-
-;; ================================================================================================
-
-
 
 ;; (defn transient-server?
 ;;   "Return true if the server was booted by us, whether internally or
