@@ -10,13 +10,6 @@
 ;;   (:require [overtone.config.log :as log]
 ;;             [overtone.libs.handlers :as handlers]))
 
-;; (defonce ^:private handler-pool (handlers/mk-handler-pool "Overtone Event Handlers"))
-;; (defonce ^:private event-debug* (atom false))
-;; (defonce ^:private monitoring?* (atom false))
-;; (defonce ^:private monitor* (atom {}))
-;; (defonce ^:private lossy-workers* (atom {}))
-;; (defonce ^:private log-events? (atom false))
-
 (ns
   ^{:doc "A simple event system that processes fired events in a thread pool."
      :author "Jeff Rose, Sam Aaron"}
@@ -113,7 +106,7 @@
 ;;                               (funky-bass (:note event)))
 ;;                             ::midi-note-down-hdlr)
 
-;;   Handlers can return :overtone/remove-handler to be removed from
+;;   Handlers can return :sc-osc/remove-handler to be removed from
 ;;   the handler list after execution."
 ;;   [event-type handler key]
 ;;   (log-event "Registering async event handler:: " event-type " with key: " key)
@@ -137,7 +130,7 @@
                               (funky-bass (:note event)))
                             ::midi-note-down-hdlr)
 
-  Handlers can return :overtone/remove-handler to be removed from the
+  Handlers can return :sc-osc/remove-handler to be removed from the
   handler list after execution."
   [event-type handler key]
   ;; (log-event "Registering sync event handler:: " event-type " with key: " key)

@@ -132,11 +132,11 @@
 (defn- run-handler
   "Apply the handler to the args - handling exceptions
   gracefully. Also remove the handler if it
-  returns :overtone/remove-handler."
+  returns :sc-osc/remove-handler."
   [key handler event-map hp]
   (try
     (let [res (handler event-map)]
-      (when (= :overtone/remove-handler res)
+      (when (= :sc-osc/remove-handler res)
         (remove-handler! hp key))
       res)
     (catch Exception e
@@ -266,7 +266,7 @@
 
   The handler fn must accept one arg - a map of event info.
 
-  If the handler returns the keyword :overtone/remove-handler, the
+  If the handler returns the keyword :sc-osc/remove-handler, the
   handler will then remove itself. Note, this is not an atomic
   action. It is therefore possible that the handler is triggered again
   from a different thread before removing itself. Use a one-shot
@@ -294,7 +294,7 @@
 
   The handler fn must accept one arg - a map of event info.
 
-  If the handler returns the keyword :overtone/remove-handler, the
+  If the handler returns the keyword :sc-osc/remove-handler, the
   handler will then remove itself. Note, this is not an atomic
   action. It is therefore possible that the handler is triggered again
   from a different thread before removing itself. Use a one-shot

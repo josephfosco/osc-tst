@@ -169,7 +169,7 @@
   ;; (log/debug "Connecting to external SuperCollider server: " host ":" port)
   (println "Connecting to external SuperCollider server: " host ":" port)
   (let [sc-server (osc/osc-client host port false)]
-    (osc/osc-listen sc-server #(event/event [:overtone :osc-msg-received] :msg %))
+    (osc/osc-listen sc-server #(event/event [:sc-osc :osc-msg-received] :msg %))
     (dosync
      (ref-set server-osc-peer* sc-server))
 
@@ -222,7 +222,7 @@
 ;; (defn- osc-msg-decoder
 ;;   "Decodes incoming osc message buffers and then sends them as overtone events."
 ;;   [buf]
-;;   (event/event [:overtone :osc-msg-received] :msg (osc-decode-packet buf)))
+;;   (event/event [:sc-osc :osc-msg-received] :msg (osc-decode-packet buf)))
 
 ;; (defn- internal-booter
 ;;   "Fn to actually boot internal server. Typically called within a thread."

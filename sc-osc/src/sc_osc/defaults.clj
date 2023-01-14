@@ -9,7 +9,7 @@
   ;;           [overtone.config.store])
   )
 
-(def empty-foundation-groups {:overtone-group          nil
+(def empty-foundation-groups {:sc-osc-group            nil
                               :input-group             nil
                               :root-group              nil
                               :user-group              nil

@@ -17,7 +17,7 @@
 
 ;; The base handler for receiving osc messages just forwards the message on
 ;; as an event using the osc path as the event key.
-(on-sync-event [:overtone :osc-msg-received]
+(on-sync-event [:sc-osc :osc-msg-received]
                (fn [{{path :path args :args} :msg}]
                  (when @osc-debug*
                    (println "Receiving: " path args))
@@ -64,7 +64,7 @@
 ;;     (on-event "/synced"
 ;;               (fn [msg] (when (= id (first (:args msg)))
 ;;                          (handler-fn)
-;;                          :overtone/remove-handler))
+;;                          :sc-osc/remove-handler))
 ;;               key)
 
 ;;     (let [res (action-fn)]
@@ -120,7 +120,7 @@
 ;;        (on-event "/synced"
 ;;                  (fn [msg] (when (= id (first (:args msg)))
 ;;                             (deliver prom true)
-;;                             :overtone/remove-handler))
+;;                             :sc-osc/remove-handler))
 ;;                  key)
 ;;        (let [res (action-fn)]
 ;;          (server-snd "/sync" id)
@@ -146,6 +146,6 @@
                         (when (or (nil? matcher-fn)
                                   (matcher-fn info))
                           (deliver p info)
-                          :overtone/remove-handler))
+                          :sc-osc/remove-handler))
                       key)
        p)))
