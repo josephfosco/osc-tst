@@ -174,7 +174,6 @@
      (ref-set server-osc-peer* sc-server))
 
     (setup-connect-handlers)
-    (server-snd "/status")
 
     ;; Send /status in a loop until we get a reply
     (loop [cnt 0]
