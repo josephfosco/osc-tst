@@ -18,3 +18,12 @@ http://doc.sccode.org/Reference/Server-Command-Reference.html
 Look into what the file that SC lang uses to store synthdefs looks like
 
 Fix license - add mit license to Overtone code and osc-clj
+
+In sc-osc lib need to get logging working to print a simpler message not full file format.
+
+In sc-osc need to be able to turn off file-logging
+
+In sc-osc library  need a way to pass in config settings, esp for logging
+need to pass in log-level and LOG-FILE.
+
+Need a way to set LOG-FILE in sc-osc config.clj
