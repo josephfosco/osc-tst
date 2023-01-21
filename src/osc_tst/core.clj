@@ -1,8 +1,15 @@
 (ns osc-tst.core
-  (:use [sc-osc.connection]
+  (:use [osc-tst.config]
+        [sc-osc.connection]
+        [sc-osc.server-comms]
         ))
 
 (defn sc-connect
   []
-  (sc-osc.connection/connect)
+  (connect)
    )
+
+(defn synth-file
+  [fname]
+  (str SYNTH-DIR fname SYNTHDEF-FILE-EXT)
+  )

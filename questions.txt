@@ -1,0 +1,1 @@
+How to get a scsynth server to allow messages from multiple clients, like clj and SuperCollider

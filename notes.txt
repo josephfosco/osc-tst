@@ -4,26 +4,37 @@ scsynth -u 57711
 this starts supercollider with the udp port 57711
 udp port 57711 seems to be default ued for supercollider
 
+To load a synth def file
+(server-snd "/d_load" "/home/joseph/src/clj/osc-tst/synths/synthSin.scsyndef")
+
+
+
+==================================================================
+SuperCollider
+
+to write a synthdef to a synthdef file
+(
+SynthDef.new("synthSin", { |out|
+    var outArray;
+    outArray = [SinOsc.ar(440, 0, 0.2), SinOsc.ar(442, 0, 0.2)];
+    Out.ar(out, outArray)
+}).writeDefFile("/home/joseph/src/clj/osc-tst/synths/");
+)
+
 
 ==================================================================
 
 OSC
 
+OSC docs
+https://opensoundcontrol.stanford.edu/spec-1_0.html
+
 Supercollider OSC command reference
 http://doc.sccode.org/Reference/Server-Command-Reference.html
 
 
+SonicPi synth doc
+https://github.com/sonic-pi-net/sonic-pi/blob/710107fe22c5977b9fa5e83b71e30f847610e240/SYNTH_DESIGN.md
+
+
 ==================================================================
-
-Look into what the file that SC lang uses to store synthdefs looks like
-
-Fix license - add mit license to Overtone code and osc-clj
-
-In sc-osc lib need to get logging working to print a simpler message not full file format.
-
-In sc-osc need to be able to turn off file-logging
-
-In sc-osc library  need a way to pass in config settings, esp for logging
-need to pass in log-level and LOG-FILE.
-
-Need a way to set LOG-FILE in sc-osc config.clj
