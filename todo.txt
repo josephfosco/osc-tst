@@ -8,3 +8,5 @@ In sc-osc library  need a way to pass in config settings, esp for logging
 need to pass in log-level and LOG-FILE.
 
 Need a way to set LOG-FILE in sc-osc config.clj
+
+Figure out how to use timestamps for OSC events
