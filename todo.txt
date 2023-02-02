@@ -9,4 +9,7 @@ need to pass in log-level and LOG-FILE.
 
 Need a way to set LOG-FILE in sc-osc config.clj
 
-Figure out how to use timestamps for OSC events
+Figure out how to use timestamps for OSC events -
+  need to use OSC bundles. How to transmit a Bundle to Overtone
+  the OSC spec says Bundles start with the string "#BUNDLE" that is 8 characters
+  is the eighth character the space after the string?

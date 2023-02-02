@@ -1,4 +1,4 @@
-;; copied from the Overtone project overtone.libs.event
+;; copied from the Overtone project overtone.config.log
 
 
 
@@ -23,7 +23,7 @@
                            :error Level/SEVERE})
 (def ^:private REVERSE-LOG-LEVELS (apply hash-map (flatten (map reverse LOG-LEVELS))))
 
-(defonce ^:private LOGGER (Logger/getLogger "overtone"))
+(defonce ^:private LOGGER (Logger/getLogger "sc-osc"))
 (defonce ^:private LOG-CONSOLE (ConsoleHandler.))
 (defonce ^:private LOG-FILE-HANDLER (FileHandler. LOG-FILE LOG-LIMIT LOG-COUNT LOG-APPEND))
 
@@ -43,13 +43,31 @@
                                :date (Date. (long ts))
                                :msg msg}))))))
 
+(defn- print-formatter []
+  (proxy [Formatter] []
+    (format [^LogRecord log-rec]
+      (let [lvl (REVERSE-LOG-LEVELS (.getLevel log-rec))
+            msg (.getMessage log-rec)
+            ts (.getMillis log-rec)]
+        (with-out-str (print lvl (Date. (long ts)) msg))))))
+
 (defn- print-handler []
   (let [formatter (log-formatter)]
     (proxy [StreamHandler] []
       (publish [msg] (println (.format formatter msg))))))
 
+(defn- console-handler []
+  (let [formatter (print-formatter)]
+    (proxy [StreamHandler] []
+      (publish [msg] (println (.format formatter msg))))))
+
 (defn console []
-  (.addHandler LOGGER (print-handler)))
+  (.addHandler LOGGER (console-handler)))
+
+(defn file-logging-off []
+  (info "Turning off logging to file")
+  (.removeHandler LOGGER LOG-FILE-HANDLER)
+  (.close LOG-FILE-HANDLER))
 
 (defn log-level
   "Returns the current log level"
