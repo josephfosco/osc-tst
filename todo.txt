@@ -7,7 +7,7 @@ In sc-osc need to be able to turn off file-logging
 In sc-osc library  need a way to pass in config settings, esp for logging
 need to pass in log-level and LOG-FILE.
 
-Need a way to set LOG-FILE in sc-osc config.clj
+Need a way to change the log file used in sc-osc/log.clj
 
 Figure out how to use timestamps for OSC events -
   need to use OSC bundles. How to transmit a Bundle to Overtone

@@ -10,7 +10,7 @@
       :author "Sam Aaron"}
   sc-osc.osc-validator
   (:use [overtone.osc])
-  ;; (:require [overtone.config.log :as log])
+  (:require [sc-osc.log :as log])
   )
 
 (def TYPES
@@ -219,8 +219,7 @@
   (if-let [type-info (TYPES type)]
     (apply (:validator type-info) [val])
     (let [err-str (str "Unknown OSC arg type " type ". Expecting one of " (keys TYPES))]
-      ;; (log/error err-str)
-      (println err-str)
+      (log/error err-str)
       (throw (IllegalArgumentException. err-str)))))
 
 (defn- many-type?
@@ -282,8 +281,7 @@
 
     (when (arity-mismatch? s-arity a-arity)
       (let [err-string (str "Failed attempting to send an OSC message to SuperCollider server. Reason: you didn't provide the correct number of arguments for OSC message " path ". Expected " s-arity ", got " a-arity " Type sig: " sig " Arg list: " args)]
-        ;; (log/error err-string)
-        (println err-string)
+        (log/error err-string)
         (throw (IllegalArgumentException. err-string))))
 
     (when-let [[err-type err-arg] (error-args sig args)]
@@ -299,8 +297,7 @@
                             sig
                             " Arg list: "
                             args)]
-        ;; (log/error err-string)
-        (println err-string)
+        (log/error err-string)
         (throw (IllegalArgumentException. err-string))))
     (apply osc-send host path args)))
 
@@ -313,6 +310,5 @@
   (if-let [sig (OSC-TYPE-SIGNATURES path)]
     (apply checked-snd sig host path args)
     (let [err-string (str "Unknown scsynth OSC path" path)]
-      ;; (log/error err-string)
-      (println err-string)
+      (log/error err-string)
       (throw (Exception. err-string)))))

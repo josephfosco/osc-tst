@@ -16,7 +16,7 @@
   sc-osc.event
   (:import [java.util.concurrent LinkedBlockingQueue])
   (:use [sc-osc.ref :only [swap-returning-prev!]])
-  (:require ;; [overtone.config.log :as log]
+  (:require [sc-osc.log :as log]
             [sc-osc.handlers :as handlers])
   )
 
@@ -27,11 +27,11 @@
 (defonce ^:private lossy-workers* (atom {}))
 (defonce ^:private log-events? (atom false))
 
-;; (defn- log-event
-;;   "Log event on separate thread to ensure logging doesn't interfere with
-;;   event handling latency"
-;;   [msg & args]
-;;   (future (apply log/debug msg args)))
+(defn- log-event
+  "Log event on separate thread to ensure logging doesn't interfere with
+  event handling latency"
+  [msg & args]
+  (future (apply log/debug msg args)))
 
 ;; (defonce ^{:private true} __RECORDS__
 ;;   (do
@@ -133,8 +133,7 @@
   Handlers can return :sc-osc/remove-handler to be removed from the
   handler list after execution."
   [event-type handler key]
-  ;; (log-event "Registering sync event handler:: " event-type " with key: " key)
-  (println "Registering sync event handler:: " event-type " with key: " key)
+  (log-event "Registering sync event handler:: " event-type " with key: " key)
   (handlers/add-sync-handler! handler-pool event-type key handler))
 
 ;; (defn on-latest-event
@@ -171,8 +170,7 @@
 
   (oneshot-event \"/foo\" (fn [v] (println v)) ::debug)"
   [event-type handler key]
-  ;; (log-event "Registering async self-removing event handler:: " event-type " with key: " key)
-  (println "Registering async self-removing event handler:: " event-type " with key: " key)
+  (log-event "Registering async self-removing event handler:: " event-type " with key: " key)
   (handlers/add-one-shot-handler! handler-pool event-type key handler))
 
 ;; (defn oneshot-sync-event
@@ -201,8 +199,7 @@
   (let [[old new] (swap-returning-prev! lossy-workers* dissoc key)]
     (when-let [old-worker (get old key)]
       (.put (:queue old-worker) :die)))
-  ;; (log-event "Removing event handler associated with key: " key)
-  (println "Removing event handler associated with key: " key)
+  (log-event "Removing event handler associated with key: " key)
   (handlers/remove-handler! handler-pool key))
 
 ;; (defn- remove-all-event-handlers
@@ -225,13 +222,11 @@
   (event ::my-event)
   (event ::filter-sweep-done :instrument :phat-bass)"
   [event-type & args]
-  ;; (when @log-events?
-  ;;   (log-event "event: " event-type " " args))
-  (println "event: " event-type " " args)
-  ;; (when @event-debug*
-  ;;   (println "event: " (with-out-str (pr event-type args)) "\n")
-  ;;   )
-  (println "event: " (with-out-str (pr event-type args)) "\n")
+  (when @log-events?
+    (log-event "event: " event-type " " args))
+  (when @event-debug*
+    (println "event: " (with-out-str (pr event-type args)) "\n")
+    )
 
   ;; (when @monitoring?*
   ;;   (swap! monitor* assoc event-type args))

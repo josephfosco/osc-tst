@@ -5,10 +5,10 @@ this starts supercollider with the udp port 57711
 udp port 57711 seems to be default ued for supercollider
 
 To load a synth def file
-(server-snd "/d_load" "/home/joseph/src/clj/osc-tst/synths/synthSin.scsyndef")
+(server-snd "/d_load" "/home/joseph/src/clj/osc-tst/synths/sc/synthSin.scsyndef")
 
 To create a synth
-(server-snd "/s(server-snd "/s_new" "synthSin" 0 5 0)
+(server-snd "/s_new" "synthSin" 1000 0 1)
 
 To stop a synth immediately
 (server-snd "/n_run" 4 0)

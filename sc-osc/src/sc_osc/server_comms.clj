@@ -8,7 +8,7 @@
         [sc-osc.event]
   ;;       [overtone.helpers.lib :only [uuid deref!]])
         [sc-osc.lib :only [uuid]])
-  ;; (:require [overtone.config.log :as log])
+  (:require [sc-osc.log :as log])
   )
 
 (defonce osc-debug*       (atom false))
@@ -48,8 +48,7 @@
   (server-snd \"/foo\" 1 2.0 \"eggs\")"
   [path & args]
   (let [args (massage-numerical-args (vec args))]
-    ;; (log/debug (str "Sending: " path ", args: " (into [] args)))
-    (println (str "Sending: " path ", args: " (into [] args)))
+    (log/debug (str "Sending: " path ", args: " (into [] args)))
     (when @osc-debug*
       (println "Sending: " path args))
     (apply validated-snd @server-osc-peer* path args)))
