@@ -12,6 +12,4 @@ Figure out how to use timestamps for OSC events -
   the OSC spec says Bundles start with the string "#BUNDLE" that is 8 characters
   is the eighth character the space after the string?
 
-Why does supercollider gong sound different than clojure gong
-
 How to receive and print messages received from the server
