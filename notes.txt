@@ -11,10 +11,10 @@ To create a synth
 (server-snd "/s_new" "synthSin" 1000 0 1)
 
 To stop a synth immediately
-(server-snd "/n_run" 4 0)
+(server-snd "/n_run" 1000 0)
 
 To Free the synth/node
-(server-snd "/n_free" 4)
+(server-snd "/n_free" 1000)
 
 ==================================================================
 SuperCollider
@@ -28,6 +28,30 @@ SynthDef.new("synthSin", { |out|
 }).writeDefFile("/home/joseph/src/clj/osc-tst/synths/");
 )
 
+
+==================================================================
+osc-tst Sample Session
+
+After starting scsynth and connecting it to pipewire
+
+In the osc-tst directory:
+
+> clj
+user=> (use 'osc-tst.core)
+nil
+user=> (ns osc-tst.core)
+osc-tst.core=>(event-debug-on)    ;; To print events sent FROM server to console
+osc-tst.core=> (connect)
+....
+--> Connection established
+nil
+osc-tst.core=> (server-snd "/g_new" 1 0 0)    ;; set up default group
+osc-tst.core=> (server-snd "/d_load" (synth-file "gong"))
+osc-tst.core=> (server-snd "/s_new" "gong" 1000 0 1)
+osc-tst.core=> (server-snd "/n_set" 1000 "gate" 0.0)
+osc-tst.core=> (server-snd "/n_set" 1000 "gate" 1.0)
+osc-tst.core=> (server-snd "/n_free" 1000)
+osc-tst.core=> (event-debug-off)   ;; STOP printing events to console
 
 ==================================================================
 

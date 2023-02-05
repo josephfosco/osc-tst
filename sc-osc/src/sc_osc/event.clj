@@ -1,15 +1,6 @@
 ;; copied from the Overtone project overtone.libs.event
 
 
-;; (ns
-;;   ^{:doc "A simple event system that processes fired events in a thread pool."
-;;      :author "Jeff Rose, Sam Aaron"}
-;;   overtone.libs.event
-;;   (:import [java.util.concurrent LinkedBlockingQueue])
-;;   (:use [overtone.helpers.ref :only [swap-returning-prev!]])
-;;   (:require [overtone.config.log :as log]
-;;             [overtone.libs.handlers :as handlers]))
-
 (ns
   ^{:doc "A simple event system that processes fired events in a thread pool."
      :author "Jeff Rose, Sam Aaron"}
@@ -195,7 +186,6 @@
   (remove-event-handler ::bar-key)
   (event :foo :val 200) ; my-foo-handler no longer called"
   [key]
-  (println "lossy-workers " lossy-workers*)
   (let [[old new] (swap-returning-prev! lossy-workers* dissoc key)]
     (when-let [old-worker (get old key)]
       (.put (:queue old-worker) :die)))
@@ -227,22 +217,14 @@
   (when @event-debug*
     (println "event: " (with-out-str (pr event-type args)) "\n")
     )
-
-  ;; (when @monitoring?*
-  ;;   (swap! monitor* assoc event-type args))
-
-  ;; (binding [overtone.libs.handlers/*log-fn* log/error]
-  ;;   (let [event-info (if (and (= 1 (count args))
-  ;;                             (map? (first args)))
-  ;;                      (first args)
-  ;;                      (apply hash-map args))]
-  ;;     (handlers/event handler-pool event-type event-info))))
-
-  (let [event-info (if (and (= 1 (count args))
-                            (map? (first args)))
-                     (first args)
-                     (apply hash-map args))]
-    (handlers/event handler-pool event-type event-info)))
+  (when @monitoring?*
+    (swap! monitor* assoc event-type args))
+  (binding [sc-osc.handlers/*log-fn* log/error]
+    (let [event-info (if (and (= 1 (count args))
+                              (map? (first args)))
+                       (first args)
+                       (apply hash-map args))]
+      (handlers/event handler-pool event-type event-info))))
 
 ;; (defn sync-event
 ;;   "Runs all event handlers synchronously of type event-tye regardless
@@ -263,54 +245,54 @@
 ;;                        (apply hash-map args))]
 ;;       (apply handlers/sync-event handler-pool event-type event-info))))
 
-;; (defn event-debug-on
-;;   "Prints out all incoming events to stdout. May slow things down."
-;;   []
-;;   (reset! event-debug* true))
+(defn event-debug-on
+  "Prints out all incoming events to stdout. May slow things down."
+  []
+  (reset! event-debug* true))
 
-;; (defn event-debug-off
-;;   "Stops debug info from being printed out."
-;;   []
-;;   (reset! event-debug* false))
+(defn event-debug-off
+  "Stops debug info from being printed out."
+  []
+  (reset! event-debug* false))
 
-;; (defn event-monitor-on
-;;   "Start recording new incoming events into a map which can be examined
-;;   with #'event-monitor"
-;;   []
-;;   (reset! monitor* {})
-;;   (println "Event monitoring enabled")
-;;   (reset! monitoring?* true))
+(defn event-monitor-on
+  "Start recording new incoming events into a map which can be examined
+  with #'event-monitor"
+  []
+  (reset! monitor* {})
+  (println "Event monitoring enabled")
+  (reset! monitoring?* true))
 
-;; (defn event-monitor-off
-;;   "Stop recording new incoming events"
-;;   []
-;;   (println "Event monitoring disabled")
-;;   (reset! monitoring?* false))
+(defn event-monitor-off
+  "Stop recording new incoming events"
+  []
+  (println "Event monitoring disabled")
+  (reset! monitoring?* false))
 
-;; (defn event-monitor-timer
-;;   "Record events for a specific period of time in seconds (defaults to
-;;   5)."
-;;   ([] (event-monitor-timer 5))
-;;   ([seconds]
-;;      (event-monitor-on)
-;;      (loop [i seconds]
-;;        (when (and @monitoring?* (pos? i))
-;;          (println (str "Event monitor activated for "
-;;                        i
-;;                        " more second"
-;;                        (when (> i 1)
-;;                          "s")))
-;;          (Thread/sleep 1000)
-;;          (recur (dec i))))
-;;      (event-monitor-off)))
+(defn event-monitor-timer
+  "Record events for a specific period of time in seconds (defaults to
+  5)."
+  ([] (event-monitor-timer 5))
+  ([seconds]
+     (event-monitor-on)
+     (loop [i seconds]
+       (when (and @monitoring?* (pos? i))
+         (println (str "Event monitor activated for "
+                       i
+                       " more second"
+                       (when (> i 1)
+                         "s")))
+         (Thread/sleep 1000)
+         (recur (dec i))))
+     (event-monitor-off)))
 
-;; (defn event-monitor
-;;   "Return a map of the most recently seen events. This is reset every
-;;   time #'event-monitor-on is called."
-;;   ([] @monitor*)
-;;   ([event-key] (get @monitor* event-key)))
+(defn event-monitor
+  "Return a map of the most recently seen events. This is reset every
+  time #'event-monitor-on is called."
+  ([] @monitor*)
+  ([event-key] (get @monitor* event-key)))
 
-;; (defn event-monitor-keys
-;;   "Return a set of all the keys of most recently seen events."
-;;   []
-;;   (into #{} (keys @monitor*)))
+(defn event-monitor-keys
+  "Return a set of all the keys of most recently seen events."
+  []
+  (into #{} (keys @monitor*)))
