@@ -1,6 +1,7 @@
 (ns osc-tst.core
   (:use [osc-tst.config]
         [sc-osc.connection]
+        [sc-osc.event]
         [sc-osc.server-comms]
         ))
 

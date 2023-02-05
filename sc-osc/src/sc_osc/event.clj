@@ -1,22 +1,13 @@
 ;; copied from the Overtone project overtone.libs.event
 
 
-;; (ns
-;;   ^{:doc "A simple event system that processes fired events in a thread pool."
-;;      :author "Jeff Rose, Sam Aaron"}
-;;   overtone.libs.event
-;;   (:import [java.util.concurrent LinkedBlockingQueue])
-;;   (:use [overtone.helpers.ref :only [swap-returning-prev!]])
-;;   (:require [overtone.config.log :as log]
-;;             [overtone.libs.handlers :as handlers]))
-
 (ns
   ^{:doc "A simple event system that processes fired events in a thread pool."
      :author "Jeff Rose, Sam Aaron"}
   sc-osc.event
   (:import [java.util.concurrent LinkedBlockingQueue])
   (:use [sc-osc.ref :only [swap-returning-prev!]])
-  (:require ;; [overtone.config.log :as log]
+  (:require [sc-osc.log :as log]
             [sc-osc.handlers :as handlers])
   )
 
@@ -27,11 +18,11 @@
 (defonce ^:private lossy-workers* (atom {}))
 (defonce ^:private log-events? (atom false))
 
-;; (defn- log-event
-;;   "Log event on separate thread to ensure logging doesn't interfere with
-;;   event handling latency"
-;;   [msg & args]
-;;   (future (apply log/debug msg args)))
+(defn- log-event
+  "Log event on separate thread to ensure logging doesn't interfere with
+  event handling latency"
+  [msg & args]
+  (future (apply log/debug msg args)))
 
 ;; (defonce ^{:private true} __RECORDS__
 ;;   (do
@@ -133,8 +124,7 @@
   Handlers can return :sc-osc/remove-handler to be removed from the
   handler list after execution."
   [event-type handler key]
-  ;; (log-event "Registering sync event handler:: " event-type " with key: " key)
-  (println "Registering sync event handler:: " event-type " with key: " key)
+  (log-event "Registering sync event handler:: " event-type " with key: " key)
   (handlers/add-sync-handler! handler-pool event-type key handler))
 
 ;; (defn on-latest-event
@@ -171,8 +161,7 @@
 
   (oneshot-event \"/foo\" (fn [v] (println v)) ::debug)"
   [event-type handler key]
-  ;; (log-event "Registering async self-removing event handler:: " event-type " with key: " key)
-  (println "Registering async self-removing event handler:: " event-type " with key: " key)
+  (log-event "Registering async self-removing event handler:: " event-type " with key: " key)
   (handlers/add-one-shot-handler! handler-pool event-type key handler))
 
 ;; (defn oneshot-sync-event
@@ -197,12 +186,10 @@
   (remove-event-handler ::bar-key)
   (event :foo :val 200) ; my-foo-handler no longer called"
   [key]
-  (println "lossy-workers " lossy-workers*)
   (let [[old new] (swap-returning-prev! lossy-workers* dissoc key)]
     (when-let [old-worker (get old key)]
       (.put (:queue old-worker) :die)))
-  ;; (log-event "Removing event handler associated with key: " key)
-  (println "Removing event handler associated with key: " key)
+  (log-event "Removing event handler associated with key: " key)
   (handlers/remove-handler! handler-pool key))
 
 ;; (defn- remove-all-event-handlers
@@ -225,29 +212,19 @@
   (event ::my-event)
   (event ::filter-sweep-done :instrument :phat-bass)"
   [event-type & args]
-  ;; (when @log-events?
-  ;;   (log-event "event: " event-type " " args))
-  (println "event: " event-type " " args)
-  ;; (when @event-debug*
-  ;;   (println "event: " (with-out-str (pr event-type args)) "\n")
-  ;;   )
-  (println "event: " (with-out-str (pr event-type args)) "\n")
-
-  ;; (when @monitoring?*
-  ;;   (swap! monitor* assoc event-type args))
-
-  ;; (binding [overtone.libs.handlers/*log-fn* log/error]
-  ;;   (let [event-info (if (and (= 1 (count args))
-  ;;                             (map? (first args)))
-  ;;                      (first args)
-  ;;                      (apply hash-map args))]
-  ;;     (handlers/event handler-pool event-type event-info))))
-
-  (let [event-info (if (and (= 1 (count args))
-                            (map? (first args)))
-                     (first args)
-                     (apply hash-map args))]
-    (handlers/event handler-pool event-type event-info)))
+  (when @log-events?
+    (log-event "event: " event-type " " args))
+  (when @event-debug*
+    (println "event: " (with-out-str (pr event-type args)) "\n")
+    )
+  (when @monitoring?*
+    (swap! monitor* assoc event-type args))
+  (binding [sc-osc.handlers/*log-fn* log/error]
+    (let [event-info (if (and (= 1 (count args))
+                              (map? (first args)))
+                       (first args)
+                       (apply hash-map args))]
+      (handlers/event handler-pool event-type event-info))))
 
 ;; (defn sync-event
 ;;   "Runs all event handlers synchronously of type event-tye regardless
@@ -268,54 +245,54 @@
 ;;                        (apply hash-map args))]
 ;;       (apply handlers/sync-event handler-pool event-type event-info))))
 
-;; (defn event-debug-on
-;;   "Prints out all incoming events to stdout. May slow things down."
-;;   []
-;;   (reset! event-debug* true))
+(defn event-debug-on
+  "Prints out all incoming events to stdout. May slow things down."
+  []
+  (reset! event-debug* true))
 
-;; (defn event-debug-off
-;;   "Stops debug info from being printed out."
-;;   []
-;;   (reset! event-debug* false))
+(defn event-debug-off
+  "Stops debug info from being printed out."
+  []
+  (reset! event-debug* false))
 
-;; (defn event-monitor-on
-;;   "Start recording new incoming events into a map which can be examined
-;;   with #'event-monitor"
-;;   []
-;;   (reset! monitor* {})
-;;   (println "Event monitoring enabled")
-;;   (reset! monitoring?* true))
+(defn event-monitor-on
+  "Start recording new incoming events into a map which can be examined
+  with #'event-monitor"
+  []
+  (reset! monitor* {})
+  (println "Event monitoring enabled")
+  (reset! monitoring?* true))
 
-;; (defn event-monitor-off
-;;   "Stop recording new incoming events"
-;;   []
-;;   (println "Event monitoring disabled")
-;;   (reset! monitoring?* false))
+(defn event-monitor-off
+  "Stop recording new incoming events"
+  []
+  (println "Event monitoring disabled")
+  (reset! monitoring?* false))
 
-;; (defn event-monitor-timer
-;;   "Record events for a specific period of time in seconds (defaults to
-;;   5)."
-;;   ([] (event-monitor-timer 5))
-;;   ([seconds]
-;;      (event-monitor-on)
-;;      (loop [i seconds]
-;;        (when (and @monitoring?* (pos? i))
-;;          (println (str "Event monitor activated for "
-;;                        i
-;;                        " more second"
-;;                        (when (> i 1)
-;;                          "s")))
-;;          (Thread/sleep 1000)
-;;          (recur (dec i))))
-;;      (event-monitor-off)))
+(defn event-monitor-timer
+  "Record events for a specific period of time in seconds (defaults to
+  5)."
+  ([] (event-monitor-timer 5))
+  ([seconds]
+     (event-monitor-on)
+     (loop [i seconds]
+       (when (and @monitoring?* (pos? i))
+         (println (str "Event monitor activated for "
+                       i
+                       " more second"
+                       (when (> i 1)
+                         "s")))
+         (Thread/sleep 1000)
+         (recur (dec i))))
+     (event-monitor-off)))
 
-;; (defn event-monitor
-;;   "Return a map of the most recently seen events. This is reset every
-;;   time #'event-monitor-on is called."
-;;   ([] @monitor*)
-;;   ([event-key] (get @monitor* event-key)))
+(defn event-monitor
+  "Return a map of the most recently seen events. This is reset every
+  time #'event-monitor-on is called."
+  ([] @monitor*)
+  ([event-key] (get @monitor* event-key)))
 
-;; (defn event-monitor-keys
-;;   "Return a set of all the keys of most recently seen events."
-;;   []
-;;   (into #{} (keys @monitor*)))
+(defn event-monitor-keys
+  "Return a set of all the keys of most recently seen events."
+  []
+  (into #{} (keys @monitor*)))

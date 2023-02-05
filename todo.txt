@@ -1,15 +1,15 @@
 Fix license - add mit license to Overtone code and osc-clj
 
-In sc-osc lib need to get logging working to print a simpler message not full file format.
-
 In sc-osc need to be able to turn off file-logging
 
 In sc-osc library  need a way to pass in config settings, esp for logging
 need to pass in log-level and LOG-FILE.
 
-Need a way to set LOG-FILE in sc-osc config.clj
+Need a way to change the log file used in sc-osc/log.clj
 
 Figure out how to use timestamps for OSC events -
   need to use OSC bundles. How to transmit a Bundle to Overtone
   the OSC spec says Bundles start with the string "#BUNDLE" that is 8 characters
   is the eighth character the space after the string?
+
+How to receive and print messages received from the server

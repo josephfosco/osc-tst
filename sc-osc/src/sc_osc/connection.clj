@@ -21,7 +21,7 @@
 (ns sc-osc.connection
   (:import [java.io BufferedInputStream File])
   (:require [clojure.java.shell :as shell]
-            ;; [overtone.config.log :as log]
+            [sc-osc.log :as log]
             ;; [overtone.config.store :as config]
             [sc-osc.deps :as deps]
             [sc-osc.event :as event]
@@ -143,8 +143,7 @@
           (server-notifications-on) ; turn on notifications now that we can communicate
           (deps/satisfy-deps :server-connected)
           (event/event :connection-complete)
-          ;; (log/debug "Server connection established")
-          (println "Server connection established")
+          (log/debug "Server connection established")
           (println "--> Connection established"))]
     (event/oneshot-event "status.reply" handler-fn ::connected-handler1)
     (event/oneshot-event "/status.reply" handler-fn ::connected-handler2)))
@@ -166,8 +165,7 @@
   ;;   (assert (jack-is-running?)
   ;;           "Jack Server should be running before connecting to an external server."))
   (println  "--> Connecting to external SuperCollider server:" (str host ":" port))
-  ;; (log/debug "Connecting to external SuperCollider server: " host ":" port)
-  (println "Connecting to external SuperCollider server: " host ":" port)
+  (log/debug "Connecting to external SuperCollider server: " host ":" port)
   (let [sc-server (osc/osc-client host port false)]
     (osc/osc-listen sc-server #(event/event [:sc-osc :osc-msg-received] :msg %))
     (dosync
@@ -177,13 +175,11 @@
 
     ;; Send /status in a loop until we get a reply
     (loop [cnt 0]
-      ;; (log/debug "connect loop...")
-      (println "connect loop...")
+      (log/debug "connect loop...")
       (when-not (= :connected @connection-status*)
         (if (< cnt defaults/N-RETRIES)
           (do
-            ;; (log/debug (str "sending status... (" cnt ")"  ))
-            (println (str "sending status... (" cnt ")"  ))
+            (log/debug (str "sending status... (" cnt ")"  ))
             (server-snd "/status")
             (Thread/sleep 100)
             (recur (inc cnt)))

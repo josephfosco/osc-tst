@@ -8,7 +8,7 @@
       :author "Sam Aaron & Jeff Rose"}
   sc-osc.deps
   (:require [clojure.set :as set]
-            ;; [overtone.config.log :as log]
+            [sc-osc.log :as log]
             )
   )
 
@@ -86,15 +86,11 @@
         execute-tasks   (fn [[final-done final-todo new-history] [key deps task]]
                           (if (set/superset? satisfied deps)
                             (do
-                              ;; (log/info "Running dep handler: " key)
-                              (println "Running dep handler: " key)
+                              (log/info "Running dep handler: " key)
                               (try
                                 (task)
                                 (catch Exception e
-                                  ;; (log/error (format "Exception in dependency handler: %s\n%s"
-                                  ;;                    key
-                                  ;;                    (with-out-str (.printStackTrace e))))))
-                                  (println (format "Exception in dependency handler: %s\n%s"
+                                  (log/error (format "Exception in dependency handler: %s\n%s"
                                                      key
                                                      (with-out-str (.printStackTrace e))))))
                               [(conj final-done [key deps task]) final-todo (conj new-history {:ts (now)
@@ -103,8 +99,7 @@
                                                                                                :deps deps})])
                             [final-done (conj final-todo [key deps task]) new-history]))
         [t-done t-todo new-history] (reduce execute-tasks [done [] []] todo)]
-    ;; (log/info "deps-satisfied: " satisfied)
-    (println "deps-satisfied: " satisfied)
+    (log/info "deps-satisfied: " satisfied)
     {:satisfied satisfied
      :done      t-done
      :todo      t-todo
@@ -137,8 +132,7 @@
   "Specifies that a list of dependencies have been satisfied. Uses an
    agent so it's safe to call this from within a transaction."
   [& deps]
-  ;; (log/info (format "satisfying deps: %s" deps))
-  (println (format "satisfying deps: %s" deps))
+  (log/info (format "satisfying deps: %s" deps))
   (send-off dep-state* satisfy* (set deps)))
 
 (defn reset-deps

@@ -9,9 +9,19 @@
   (:import [java.util.logging Logger Level ConsoleHandler FileHandler
             StreamHandler Formatter LogRecord]
            [java.util Date])
-  (:use ;;[overtone.config store]
-        [sc-osc.config]
+  (:use [sc-osc.config]
         [clojure.pprint :only (pprint)]))
+
+;; Usage:
+;; This file, when loaded, will automaically start a logger that will
+;; log to a file. The name and location of the file it logs to is
+;; specified in the sc_osc/config.py file as the value of the
+;; var LOG-FILE. It is currently set to ./osc.log.
+;;
+;; To add logging to the console, call the function (console).
+;;
+;; To stop logging to a file, call the function (file-logging-off)
+
 
 (def ^:private LOG-APPEND true)
 (def ^:private LOG-LIMIT 5000000)
@@ -64,11 +74,6 @@
 (defn console []
   (.addHandler LOGGER (console-handler)))
 
-(defn file-logging-off []
-  (info "Turning off logging to file")
-  (.removeHandler LOGGER LOG-FILE-HANDLER)
-  (.close LOG-FILE-HANDLER))
-
 (defn log-level
   "Returns the current log level"
   []
@@ -108,6 +113,11 @@
   "Log msg with level error"
   [& msg]
   (.log LOGGER Level/SEVERE (apply str msg)))
+
+(defn file-logging-off []
+  (info "Turning off logging to file")
+  (.removeHandler LOGGER LOG-FILE-HANDLER)
+  (.close LOG-FILE-HANDLER))
 
 (defmacro with-error-log
   "Wrap body with a try/catch form, and log exceptions (using warning)."
