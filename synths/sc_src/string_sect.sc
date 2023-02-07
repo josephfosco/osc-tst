@@ -1,7 +1,7 @@
 (
 SynthDef("string-sect", {
 	arg freq=440, vol=1, attack=0.3, sustain=1.0, release=0.3, gate=1.0,
-	    done=Done.none;
+	    done=0;
 
 	var out, env, sound;
 	env = Env.asr(attackTime: attack, sustainLevel: sustain, releaseTime: release,
