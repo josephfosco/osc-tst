@@ -408,6 +408,9 @@
   [peer bundle]
   (when @osc-debug*
     (print-debug "osc-send-bundle: " bundle))
+  (println peer)
+  (println (type (:send-q peer)))
+  (println bundle)
   (.put ^PriorityBlockingQueue (:send-q peer) [peer bundle]))
 
 (defn peer-send-msg

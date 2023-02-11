@@ -41,10 +41,13 @@ user=> (use 'osc-tst.core)
 nil
 user=> (ns osc-tst.core)
 osc-tst.core=>(event-debug-on)    ;; To print events sent FROM server to console
+osc-tst.core=>(osc-debug true)    ;; to turn on osc-clj debugging
 osc-tst.core=> (connect)
 ....
 --> Connection established
 nil
+osc-tst.core=> (server-snd "/dumpOSC" 1)    ;; print osc messages from supercollider server
+
 osc-tst.core=> (server-snd "/g_new" 1 0 0)    ;; set up default group
 osc-tst.core=> (server-snd "/d_load" (synth-file "gong"))
 osc-tst.core=> (server-snd "/s_new" "gong" 1000 0 1)
@@ -53,6 +56,20 @@ osc-tst.core=> (server-snd "/n_set" 1000 "gate" 1.0)
 osc-tst.core=> (server-snd "/n_free" 1000)
 osc-tst.core=> (event-debug-off)   ;; STOP printing events to console
 
+==================================================================
+BUNDLES
+
+
+xxx (in-osc-bundle mypeer (osc-now) (osc-send mypeer "/g_new" 1 0 0) (osc-send mypeer "/d_load" (synth-file "gong")))
+xxx (in-osc-bundle mypeer (osc-now) (osc-send mypeer "/d_load" (synth-file "gong")) (osc-send mypeer "/s_new" "gong" 1000 0 1))
+(in-osc-bundle mypeer (osc-now) (osc-send mypeer "/d_load" "/home/joseph/src/clj/osc-tst/synths/sc/gong.scsyndef") (osc-send mypeer "/s_new" "gong" 2010 0 1))
+
+This works
+(def mypeer (overtone.osc.peer/client-peer "localhost" 57711))
+(osc-send-bundle mypeer (osc-bundle (osc-now) (osc-msg "/g_new" (Integer. 1) (Integer. 0) (Integer. 0))))
+
+(osc-send-bundle mypeer (osc-bundle (osc-now) (osc-msg "/g_new" (Integer. 1) (Integer. 0) (Integer. 0)) (osc-msg "/d_load" "/home/joseph/src/clj/osc-tst/synths/sc/gong.scsyndef")))
+(osc-send-bundle mypeer (osc-bundle (osc-now) (osc-msg "/s_new" "gong" (Integer. 1002) (Integer. 0) (Integer. 1)) ))
 ==================================================================
 
 OSC

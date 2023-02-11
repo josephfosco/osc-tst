@@ -3,6 +3,7 @@
         [sc-osc.connection]
         [sc-osc.event]
         [sc-osc.server-comms]
+        [overtone.osc]
         ))
 
 (defn sc-connect
