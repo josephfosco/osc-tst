@@ -66,8 +66,21 @@ This works
 (osc-send-bundle mypeer (osc-bundle (osc-now) (osc-msg "/g_new" (Integer. 1) (Integer. 0) (Integer. 0)) (osc-msg "/d_load" "/home/joseph/src/clj/osc-tst/synths/sc/gong.scsyndef")))
 (osc-send-bundle mypeer (osc-bundle (osc-now) (osc-msg "/s_new" "gong" (Integer. 1002) (Integer. 0) (Integer. 1)) ))
 
+another way
+
 (in-osc-bundle mypeer (osc-now) (osc-send mypeer "/g_new" (Integer. 1) (Integer. 0) (Integer. 0)) (osc-send mypeer "/d_load" "/home/joseph/src/clj/osc-tst/synths/sc/gong.scsyndef"))
 (in-osc-bundle mypeer (osc-now) (osc-send mypeer "/s_new" "gong" (Integer. 1000) (Integer. 0) (Integer. 1)))
+
+another way
+
+This wy works because in-osc-bundle captures the messages sent by server-snd and puts them in the bundle.
+using server-snd with osc-send-bundle will not work because it does not capture the messages, and the osc messages
+will be sent by the server-snd function before osc-send-bundle groups and uses them.
+
+(in-osc-bundle mypeer (osc-now) (server-snd "/g_new" 1 0 0) (server-snd "/d_load" (synth-file "gong")))
+(in-osc-bundle mypeer (osc-now) (server-snd "/s_new" "gong" 1000 0 1))
+
+
 ==================================================================
 
 OSC
