@@ -41,6 +41,8 @@ user=> (use 'osc-tst.core)
 nil
 user=> (ns osc-tst.core)
 osc-tst.core=>(event-debug-on)    ;; To print events sent FROM server to console
+osc-tst.core=>(sc-osc.event/event-debug-on)
+osc-tst.core=>(overtone.osc/osc-debug true)
 osc-tst.core=>(osc-debug true)    ;; to turn on osc-clj debugging
 osc-tst.core=> (connect)
 ....
@@ -58,6 +60,10 @@ osc-tst.core=> (event-debug-off)   ;; STOP printing events to console
 
 ==================================================================
 BUNDLES
+
+WORKING ON - this line basically works
+(osc-send-bundle @server-osc-peer* (osc-bundle (osc-now) (osc-msg "/d_load" "/home/joseph/src/clj/osc-tst/synths/sc/gong.scsyndef")))
+(in-osc-bundle @server-osc-peer* (osc-now) (server-snd "/g_new" 1 0 0) (server-snd "/d_load" (synth-file "gong")))
 
 This works
 (def mypeer (overtone.osc.peer/client-peer "localhost" 57711))
@@ -79,6 +85,19 @@ will be sent by the server-snd function before osc-send-bundle groups and uses t
 
 (in-osc-bundle mypeer (osc-now) (server-snd "/g_new" 1 0 0) (server-snd "/d_load" (synth-file "gong")))
 (in-osc-bundle mypeer (osc-now) (server-snd "/s_new" "gong" 1000 0 1))
+
+
+==================================================================
+
+
+user=> (use 'osc-tst.core)
+user=> (ns osc-tst.core)
+osc-tst.core=> (sc-osc.event/event-debug-on)
+osc-tst.core=> (overtone.osc/osc-debug true)
+osc-tst.core=> (sc-connect)
+osc-tst.core=> (sc-send-msg "/dumpOSC" 1)
+osc-tst.core=> (sc-send-bundle (sc-now) (sc-send-msg "/g_new" 1 0 0) (sc-send-msg "/d_load" (synth-file "gong")))
+osc-tst.core=> (sc-send-bundle (sc-now) (sc-send-msg "/s_new" "gong" 1000 0 1))
 
 
 ==================================================================

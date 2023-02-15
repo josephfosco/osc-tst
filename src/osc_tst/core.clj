@@ -1,15 +1,7 @@
-(ns osc-tst.core
+2(ns osc-tst.core
   (:use [osc-tst.config]
-        [sc-osc.connection]
-        [sc-osc.event]
-        [sc-osc.server-comms]
-        [overtone.osc]
+        [sc-osc.sc]
         ))
-
-(defn sc-connect
-  []
-  (connect)
-   )
 
 (defn synth-file
   [fname]

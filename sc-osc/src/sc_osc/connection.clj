@@ -27,7 +27,6 @@
             [sc-osc.event :as event]
             ;; [overtone.version :as version]
             [sc-osc.defaults :as defaults]
-            ;; [overtone.sc.machinery.server.comms :refer [server-recv server-snd server-osc-peer*]]
             [sc-osc.server-comms :refer [server-recv server-snd server-osc-peer*]]
             ;; [overtone.sc.machinery.server.native :as native]
             ;; [overtone.sc.machinery.server.args :as args]
